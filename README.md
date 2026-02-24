@@ -9,6 +9,8 @@ A [Telegram Mini App](https://core.telegram.org/bots/webapps) for generating One
 <p align="center">
   <img src=".github/assets/screen-1.png" alt="Welcome screen" height="400">
   &nbsp;&nbsp;&nbsp;
+  <img src=".github/assets/screen-3.png" alt="TOTP codes list" height="400">
+  &nbsp;&nbsp;&nbsp;
   <img src=".github/assets/screen-2.png" alt="QR code scanner" height="400">
 </p>
 
