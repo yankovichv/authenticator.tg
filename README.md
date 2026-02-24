@@ -4,7 +4,11 @@
 
 # Authenticator for Telegram
 
-A [Telegram Mini App](https://core.telegram.org/bots/webapps) for generating One-Time Passwords (OTP) for your 2FA-protected accounts. Like Google Authenticator, but more accessible and secure: your data is synced across all your Telegram clients and stored exclusively in Telegram's encrypted cloud. Importing from Google Authenticator is also supported.
+A [Telegram Mini App](https://core.telegram.org/bots/webapps) for generating One-Time Passwords (OTP) for your 2FA-protected accounts.
+
+**Your data stays yours.** All secrets are stored exclusively in Telegram's encrypted cloud storage. The app has no server, no database, no analytics — it never sees, collects, or transmits your data. The code is open source, so you can verify this yourself.
+
+**Available everywhere.** Your codes are automatically synced across all your Telegram clients — mobile, desktop, and web. Wherever you have Telegram, you have your authenticator.
 
 <p align="center">
   <img src=".github/assets/screen-1.png" alt="Welcome screen" height="400">
@@ -21,11 +25,10 @@ A [Telegram Mini App](https://core.telegram.org/bots/webapps) for generating One
 ## Features
 
 - Generate time-based one-time passwords (TOTP) for any service
-- Import accounts by scanning QR codes
-- Google Authenticator migration support (bulk import)
-- Automatic light/dark theme matching with Telegram
-- Cross-device sync via Telegram's built-in cloud storage
-- Zero server infrastructure — fully client-side
+- Scan QR codes or import from Google Authenticator (bulk migration supported)
+- Synced across all your Telegram clients — phone, desktop, browser
+- No servers, no accounts, no data collection — fully client-side
+- Native Telegram look and feel with light/dark theme support
 
 ## Development
 
