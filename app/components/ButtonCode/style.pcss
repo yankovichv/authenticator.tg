@@ -1,0 +1,34 @@
+.btn {
+  border: none;
+  height: 54px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  display: inline-flex;
+  box-sizing: border-box;
+  background-color: var(--color-primary-010);
+
+  &_wrap {
+    letter-spacing: -0.4px;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  & .btn_icon {
+    transition: fill var(--anim-time-default) var(--anim-func-default);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      cursor: pointer;
+
+      & .btn_icon {
+        fill: var(--color-primary-100);
+      }
+    }
+  }
+
+  &:active {
+    & .btn_icon {
+      fill: var(--color-primary-075);
+    }
+  }
+}

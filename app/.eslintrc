@@ -1,0 +1,24 @@
+{
+  "extends": [
+    "plugin:react/recommended",
+    "prettier"
+  ],
+  "parser": "@babel/eslint-parser",
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "node": false,
+    "browser": true
+  },
+  "rules": {
+    "react/react-in-jsx-scope": "off"
+  }
+}

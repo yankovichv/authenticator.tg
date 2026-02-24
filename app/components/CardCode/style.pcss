@@ -1,0 +1,38 @@
+.card {
+  position: relative;
+  box-sizing: border-box;
+  padding: 12px 16px 16px;
+  transition: background-color var(--anim-time-default) var(--anim-func-default);
+
+  &--bordered {
+    &:after {
+      bottom: 0;
+      left: 16px;
+      height: 1px;
+      content: '';
+      position: absolute;
+      width: calc(100% - 16px);
+      border-radius: 1px 0 0 1px;
+      background-color: var(--color-foreground-010);
+    }
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      cursor: pointer;
+      background-color: var(--color-foreground-005);
+    }
+  }
+
+  &:active:not(:has(.card_copy:active)) {
+    background-color: var(--color-foreground-003);
+  }
+
+  &_copy {
+    cursor: pointer;
+  }
+
+  &_time {
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+}

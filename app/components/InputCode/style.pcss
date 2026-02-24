@@ -1,0 +1,53 @@
+.card {
+
+  &_field {
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--color-foreground-010);
+    transition: border-color var(--anim-time-default) var(--anim-func-default);
+
+    @media (hover: hover) {
+      &:hover:not(.card_field--focus) {
+        border-color: var(--color-primary-050);
+      }
+    }
+
+    &--focus {
+      border-color: var(--color-primary-100);
+    }
+  }
+
+  &_input {
+    padding: 0;
+    height: 20px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    font-style: normal;
+    width: calc(100% - 32px);
+    background-color: transparent;
+    color: var(--color-foreground-100);
+    font-family: var(--font-default), sans-serif;
+
+    &::placeholder {
+      color: var(--color-foreground-050);
+    }
+  }
+
+  &_close {
+    transition: fill var(--anim-time-default) var(--anim-func-default);
+
+    @media (hover: hover) {
+      &:hover {
+        fill: var(--color-foreground-100);
+      }
+    }
+
+    &:active {
+      fill: var(--color-foreground-075);
+    }
+  }
+}

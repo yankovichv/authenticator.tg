@@ -1,0 +1,7 @@
+version: 2
+authtoken: '''
+tunnels:
+  website:
+    addr: 9000
+    proto: http
+    domain: ngrok.manganum.app

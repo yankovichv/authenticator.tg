@@ -1,0 +1,29 @@
+.block {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
+  padding: 16px 8px;
+  position: absolute;
+  box-sizing: border-box;
+
+  &_wrap {
+    opacity: 0;
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: var(--color-foreground-075);
+    transform: translateY(calc(100% + 24px));
+    transition: transform 300ms var(--anim-func-default),
+                opacity 300ms var(--anim-func-default);
+    box-shadow: 0 4px 8px 3px rgba(0, 0, 0, 0.15), 0 1px 3px 0 rgba(0, 0, 0, 0.30);
+
+    &--show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

@@ -1,0 +1,89 @@
+
+.theme {
+  text-align: left;
+  user-select: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  color: var(--color-foreground-100);
+  background-color: var(--color-background-100);
+  font-family: var(--font-default), sans-serif;
+
+  --font-default: 'SF Pro Display';
+  --anim-time-default: 0.15s;
+  --anim-func-default: cubic-bezier(0, 0.4, 0.6, 1);
+
+  --color-fixed-white-100: rgba(255, 255, 255, 1.00);
+  --color-fixed-white-075: rgba(255, 255, 255, 0.75);
+  --color-fixed-white-050: rgba(255, 255, 255, 0.50);
+  --color-fixed-white-010: rgba(255, 255, 255, 0.10);
+  --color-fixed-white-005: rgba(255, 255, 255, 0.05);
+  --color-fixed-white-003: rgba(255, 255, 255, 0.03);
+
+  --color-fixed-black-100: rgba(19, 19, 20, 1.00);
+  --color-fixed-black-075: rgba(19, 19, 20, 0.75);
+  --color-fixed-black-050: rgba(19, 19, 20, 0.50);
+  --color-fixed-black-010: rgba(19, 19, 20, 0.10);
+  --color-fixed-black-005: rgba(19, 19, 20, 0.05);
+  --color-fixed-black-003: rgba(19, 19, 20, 0.03);
+
+  &--light {
+    --color-background-100: rgba(255, 255, 255, 1.00);
+    --color-background-075: rgba(255, 255, 255, 0.75);
+    --color-background-050: rgba(255, 255, 255, 0.50);
+    --color-background-010: rgba(255, 255, 255, 0.10);
+    --color-background-005: rgba(255, 255, 255, 0.05);
+    --color-background-003: rgba(255, 255, 255, 0.03);
+
+    --color-foreground-100: rgba(19, 19, 20, 1.00);
+    --color-foreground-075: rgba(19, 19, 20, 0.75);
+    --color-foreground-050: rgba(19, 19, 20, 0.50);
+    --color-foreground-010: rgba(19, 19, 20, 0.10);
+    --color-foreground-005: rgba(19, 19, 20, 0.05);
+    --color-foreground-003: rgba(19, 19, 20, 0.03);
+
+    --color-primary-100: rgba(16, 85, 212, 1.00);
+    --color-primary-075: rgba(16, 85, 212, 0.75);
+    --color-primary-050: rgba(16, 85, 212, 0.50);
+    --color-primary-010: rgba(16, 85, 212, 0.10);
+    --color-primary-005: rgba(16, 85, 212, 0.05);
+    --color-primary-003: rgba(16, 85, 212, 0.03);
+
+    --color-warning-100: rgba(255, 51, 28, 1.00);
+    --color-warning-075: rgba(255, 51, 28, 0.75);
+    --color-warning-050: rgba(255, 51, 28, 0.50);
+    --color-warning-010: rgba(255, 51, 28, 0.10);
+    --color-warning-005: rgba(255, 51, 28, 0.05);
+    --color-warning-003: rgba(255, 51, 28, 0.03);
+
+  }
+
+  &--dark {
+    --color-background-100: rgba(19, 19, 20, 1.00);
+    --color-background-075: rgba(19, 19, 20, 0.75);
+    --color-background-050: rgba(19, 19, 20, 0.50);
+    --color-background-010: rgba(19, 19, 20, 0.10);
+    --color-background-005: rgba(19, 19, 20, 0.05);
+    --color-background-003: rgba(19, 19, 20, 0.03);
+
+    --color-foreground-100: rgba(255, 255, 255, 1.00);
+    --color-foreground-075: rgba(255, 255, 255, 0.75);
+    --color-foreground-050: rgba(255, 255, 255, 0.50);
+    --color-foreground-010: rgba(255, 255, 255, 0.10);
+    --color-foreground-005: rgba(255, 255, 255, 0.05);
+    --color-foreground-003: rgba(255, 255, 255, 0.03);
+
+    --color-primary-100: rgba(153, 199, 251, 1.00);
+    --color-primary-075: rgba(153, 199, 251, 0.75);
+    --color-primary-050: rgba(153, 199, 251, 0.50);
+    --color-primary-010: rgba(153, 199, 251, 0.10);
+    --color-primary-005: rgba(153, 199, 251, 0.05);
+    --color-primary-003: rgba(153, 199, 251, 0.03);
+
+    --color-warning-100: rgba(255, 69, 48, 1.00);
+    --color-warning-075: rgba(255, 69, 48, 0.75);
+    --color-warning-050: rgba(255, 69, 48, 0.50);
+    --color-warning-010: rgba(255, 69, 48, 0.10);
+    --color-warning-005: rgba(255, 69, 48, 0.05);
+    --color-warning-003: rgba(255, 69, 48, 0.03);
+  }
+}
