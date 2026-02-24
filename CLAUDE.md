@@ -45,6 +45,11 @@ app/
 - `yarn test:eslint` — lint
 - `yarn test:tsc` — type check
 
+## Backlog
+
+- [ ] Drag-and-drop reordering of accounts
+- [ ] Add account by manual secret key entry (alternative to QR scanning)
+
 ## Conventions
 
 - Components: one folder per component with index.jsx + style.pcss

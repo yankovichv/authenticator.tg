@@ -67,6 +67,11 @@ yarn test:prettier   # Formatting check
 - Webpack 5
 - PostCSS + CSS Modules
 
+## Backlog
+
+- [ ] Drag-and-drop reordering of accounts
+- [ ] Add account by manual secret key entry
+
 ## License
 
 [MIT](LICENSE)
