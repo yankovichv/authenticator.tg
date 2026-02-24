@@ -6,6 +6,12 @@ Telegram Mini App for two-factor authentication (TOTP). Fully client-side, no ba
 - Bot: https://t.me/authenticatorapp_bot/
 - Repository: https://github.com/yankovichv/authenticator.tg
 
+## Telegram platform docs
+
+- https://core.telegram.org/bots — Bots overview and sub-pages
+- https://core.telegram.org/bots/api — Bot API (available to bots and mini apps)
+- https://core.telegram.org/bots/webapps — Mini Apps (formerly Web Apps) documentation
+
 ## Architecture
 
 - **Platform**: Telegram Mini App (TWA) via @twa-dev/sdk

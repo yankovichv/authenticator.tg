@@ -74,6 +74,7 @@ yarn test:prettier   # Formatting check
 
 - [ ] Drag-and-drop reordering of accounts
 - [ ] Add account by manual secret key entry
+  - Show generated code immediately upon key input (before saving), with a Cancel option to discard — for users who store secrets externally and just need a quick one-time code
 
 ## License
 
