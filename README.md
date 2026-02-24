@@ -1,6 +1,16 @@
+<p align="center">
+  <img src=".github/assets/promo-image.jpg" alt="Telegram Authenticator" width="600">
+</p>
+
 # Authenticator for Telegram
 
-A two-factor authentication (2FA) app that runs entirely inside Telegram as a Mini App. No servers, no accounts — your TOTP codes are stored securely in Telegram's cloud storage and available on any device where you use Telegram.
+A secure app for generating One-Time Passwords (OTP) for your 2FA-protected accounts — right in Telegram. Like Google Authenticator, but more accessible and secure: your data is synced across all your Telegram clients and stored exclusively in Telegram's encrypted cloud. Importing from Google Authenticator is also supported.
+
+<p align="center">
+  <img src=".github/assets/screen-1.png" alt="Welcome screen" height="400">
+  &nbsp;&nbsp;&nbsp;
+  <img src=".github/assets/screen-2.png" alt="QR code scanner" height="400">
+</p>
 
 ## Features
 
