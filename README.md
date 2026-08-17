@@ -26,6 +26,8 @@ A [Telegram Mini App](https://core.telegram.org/bots/webapps) for generating One
 
 - Generate time-based one-time passwords (TOTP) for any service
 - Scan QR codes or import from Google Authenticator (bulk migration supported)
+- Search accounts by name, reorder them by dragging
+- Copy all your accounts out as a backup you keep next to your passwords
 - Synced across all your Telegram clients — phone, desktop, browser
 - No servers, no accounts, no data collection — fully client-side
 - Native Telegram look and feel with light/dark theme support
@@ -57,6 +59,7 @@ Production bundle is created in `dist/`.
 ### Linting
 
 ```bash
+yarn test:unit       # Storage and QR parsing tests
 yarn test:eslint     # ESLint
 yarn test:tsc        # TypeScript check
 yarn test:prettier   # Formatting check
@@ -72,7 +75,6 @@ yarn test:prettier   # Formatting check
 
 ## Backlog
 
-- [ ] Drag-and-drop reordering of accounts
 - [ ] Add account by manual secret key entry
   - Show generated code immediately upon key input (before saving), with a Cancel option to discard — for users who store secrets externally and just need a quick one-time code
 
