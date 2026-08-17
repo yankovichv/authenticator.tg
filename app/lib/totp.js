@@ -3,27 +3,41 @@ import { URI, TOTP } from 'otpauth'
 import objectPath from 'object-path'
 import { trim } from '@lib/str'
 
+/**
+ * Pointing a camera at the wrong thing is a normal outcome, not a failure:
+ * anything that does not parse into a TOTP account is reported as "nothing
+ * recognized" rather than thrown. A parse error escaping this function would
+ * leave the user with no feedback at all after scanning.
+ *
+ * @param {string} uri
+ * @returns {string[]}
+ */
 export const ensureURIs = (uri) => {
   if (!uri) {
     return []
   }
 
   if (uri.startsWith('otpauth-migration')) {
-    const uris = migrationURI.toOTPAuthURIs(uri)
-    return uris.filter((str) => {
-      const data = URI.parse(str)
-      return data instanceof TOTP
-    })
-  }
-
-  if (uri.startsWith('otpauth')) {
-    const data = URI.parse(uri)
-    if (data instanceof TOTP) {
-      return [uri]
+    try {
+      return migrationURI.toOTPAuthURIs(uri).filter(isTOTP)
+    } catch (e) {
+      return []
     }
   }
 
+  if (uri.startsWith('otpauth') && isTOTP(uri)) {
+    return [uri]
+  }
+
   return []
+}
+
+const isTOTP = (uri) => {
+  try {
+    return URI.parse(uri) instanceof TOTP
+  } catch (e) {
+    return false
+  }
 }
 
 export const parseURI = (uri) => {
