@@ -1,4 +1,4 @@
-import { loadAccounts, addAccounts, updateAccount, removeAccount, moveAccount, reorderAccounts, mirrorLegacy } from '@lib/storage'
+import { loadAccounts, addAccounts, updateAccount, removeAccount, planMove, saveAccounts, mirrorLegacy } from '@lib/storage'
 import { formatLabel, ensureURIs, parseURI } from '@lib/totp'
 import ViewExport from '@containers/PageMain/ViewExport'
 import ViewCards from '@containers/PageMain/ViewCards'
@@ -292,19 +292,22 @@ class PageMain extends React.Component {
 
   async reorder(from, to) {
     const previous = this.state.accounts
+    const { accounts, dirty } = planMove(previous, from, to)
 
-    // Applied in the same frame the card is dropped. Waiting for Telegram to
-    // confirm the write first would show the old order for a moment — the
-    // list would visibly snap back and then reorder again.
-    this.setState({ accounts: reorderAccounts(previous, from, to) })
+    // Applied in the same frame the card is dropped, and carrying the very
+    // values that are about to be written. Waiting for Telegram to confirm
+    // first would make the list snap back and reorder again; showing a list
+    // whose positions are not yet computed would make the next drag save a
+    // different order than the one on screen.
+    this.setState({ accounts })
 
     try {
-      const accounts = await moveAccount(this.webApp, previous, from, to)
+      await saveAccounts(this.webApp, dirty)
       if (!this.mounted) {
         return
       }
 
-      this.setState({ accounts }, () => mirrorLegacy(this.webApp, accounts))
+      mirrorLegacy(this.webApp, accounts)
     } catch (e) {
       if (!this.mounted) {
         return

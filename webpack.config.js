@@ -74,6 +74,12 @@ const config = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.MODE': JSON.stringify(process.env.NODE_ENV),
+      // Shown on the backup screen. Without it there is no way to tell which
+      // version a user actually has — Telegram caches the app aggressively,
+      // and "is this the new version?" is otherwise unanswerable.
+      'process.env.BUILD': JSON.stringify(
+        new Date().toISOString().slice(0, 16).replace("T", " ")
+      ),
     }),
     new StylelintWebpackPlugin(),
     new EslintWebpackPlugin({

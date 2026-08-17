@@ -229,18 +229,24 @@ const run = async () => {
     const app9 = webAppFor(cloud9)
     const names = (list) => list.map((a) => a.uri.match(/totp\/Service(\d+)/)[1]).join(',')
 
+    const move = async (app, list, from, to) => {
+      const { accounts, dirty } = storage.planMove(list, from, to)
+      await storage.saveAccounts(app, dirty)
+      return accounts
+    }
+
     let list = (await storage.addAccounts(app9, [uri(1), uri(2), uri(3), uri(4)], [])).added
     check('исходный порядок', names(list) === '1,2,3,4', names(list))
 
     cloud9.writes = 0
-    list = await storage.moveAccount(app9, list, 0, 2)
+    list = await move(app9, list, 0, 2)
     check('перетащили первый на третье место', names(list) === '2,3,1,4', names(list))
     check('записан только один аккаунт', cloud9.writes === 1, `записей: ${cloud9.writes}`)
 
     let reloaded = await storage.loadAccounts(app9)
     check('порядок пережил перезагрузку', names(reloaded.accounts) === '2,3,1,4', names(reloaded.accounts))
 
-    list = await storage.moveAccount(app9, reloaded.accounts, 3, 0)
+    list = await move(app9, reloaded.accounts, 3, 0)
     check('перетащили последний в начало', names(list) === '4,2,3,1', names(list))
 
     reloaded = await storage.loadAccounts(app9)
@@ -250,14 +256,44 @@ const run = async () => {
     // список должен перенумероваться целиком, а не тихо перестать двигаться.
     let squeezed = reloaded.accounts
     for (let i = 0; i < 60; i += 1) {
-      squeezed = await storage.moveAccount(app9, squeezed, 3, 1)
-      squeezed = await storage.moveAccount(app9, squeezed, 1, 3)
+      squeezed = await move(app9, squeezed, 3, 1)
+      squeezed = await move(app9, squeezed, 1, 3)
     }
     check('после 120 перестановок порядок всё ещё меняется',
-      names(await storage.moveAccount(app9, squeezed, 0, 3)) !== names(squeezed))
+      names(await move(app9, squeezed, 0, 3)) !== names(squeezed))
 
     const final = await storage.loadAccounts(app9)
     check('и читается из облака без потерь', final.accounts.length === 4, `аккаунтов: ${final.accounts.length}`)
+  }
+
+  // --- 10. Быстрые перетаскивания подряд -----------------------------------
+  console.log('\n10. Несколько перетаскиваний подряд')
+  {
+    // Запись в облако отвечает не мгновенно, а пользователь тащит дальше,
+    // не дожидаясь её. Ровно так порядок и разъезжался с показанным.
+    const slow = new CloudStorage()
+    const realSet = slow.setItem.bind(slow)
+    slow.setItem = (key, value, cb) => setTimeout(() => realSet(key, value, cb), 40)
+
+    const app10 = webAppFor(slow)
+    const names10 = (list) => list.map((a) => a.uri.match(/totp\/Service(\d+)/)[1]).join(',')
+
+    let shown = (await storage.addAccounts(app10, [uri(1), uri(2), uri(3), uri(4), uri(5)], [])).added
+    const writes = []
+
+    // Три перетаскивания подряд: каждое считает от того, что уже на экране.
+    for (const [from, to] of [[0, 4], [0, 4], [1, 3]]) {
+      const { accounts, dirty } = storage.planMove(shown, from, to)
+      shown = accounts
+      writes.push(storage.saveAccounts(app10, dirty))
+    }
+
+    await Promise.all(writes)
+
+    const after = await storage.loadAccounts(app10)
+    check('в облаке ровно то, что было на экране',
+      names10(after.accounts) === names10(shown),
+      `на экране ${names10(shown)}, в облаке ${names10(after.accounts)}`)
   }
 
   console.log(failures === 0 ? '\nВСЁ ПРОШЛО' : `\nПРОВАЛОВ: ${failures}`)

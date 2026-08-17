@@ -192,29 +192,29 @@ export const removeAccount = (webApp, uuid) => {
 }
 
 /**
- * Moves one account within the list.
+ * Works out where a dragged account lands, without touching storage.
  *
- * Only the moved account is written: it takes an order value between its new
- * neighbours, so a drag costs one round-trip to Telegram instead of one per
- * account. Fractions eventually run out of precision — that case rewrites
- * the whole list with whole numbers rather than silently failing to move.
+ * The new order value is computed here, in the same step that produces the
+ * list shown on screen, so what the user sees and what gets written can
+ * never disagree. Splitting the two apart caused a real bug: the displayed
+ * list was reordered while the accounts still carried their old order
+ * values, so a second drag started from stale numbers and saved a different
+ * order than the one on screen.
  *
- * @param {WebAppHelper} webApp
+ * Only the moved account needs writing — it takes a value between its new
+ * neighbours, so a drag costs one round-trip instead of one per account.
+ * Fractions eventually run out of precision; that case renumbers the whole
+ * list rather than silently failing to move.
+ *
  * @param {Array} accounts
  * @param {number} from
  * @param {number} to
- * @returns {Promise<Array>} accounts in their new order
+ * @returns {{accounts: Array, dirty: Array}} the new list, and what to save
  */
-export const reorderAccounts = (accounts, from, to) => {
+export const planMove = (accounts, from, to) => {
   const next = [...accounts]
   const [moved] = next.splice(from, 1)
   next.splice(to, 0, moved)
-  return next
-}
-
-export const moveAccount = async (webApp, accounts, from, to) => {
-  const next = reorderAccounts(accounts, from, to)
-  const moved = next[to]
 
   const before = next[to - 1]
   const after = next[to + 1]
@@ -227,30 +227,26 @@ export const moveAccount = async (webApp, accounts, from, to) => {
   } else {
     order = (before.order + after.order) / 2
     if (order === before.order || order === after.order) {
-      return renumber(webApp, next)
+      const renumbered = next.map((account, index) => ({ ...account, order: index }))
+      return { accounts: renumbered, dirty: renumbered }
     }
   }
 
   const updated = { ...moved, order }
-  await writeAccount(webApp, updated)
-
   next[to] = updated
-  return next
+
+  return { accounts: next, dirty: [updated] }
 }
 
 /**
  * @param {WebAppHelper} webApp
- * @param {Array} accounts in their intended order
- * @returns {Promise<Array>}
+ * @param {Array} accounts
+ * @returns {Promise<void>}
  */
-const renumber = async (webApp, accounts) => {
-  const renumbered = accounts.map((account, index) => ({ ...account, order: index }))
-
-  for (const account of renumbered) {
+export const saveAccounts = async (webApp, accounts) => {
+  for (const account of accounts) {
     await writeAccount(webApp, account)
   }
-
-  return renumbered
 }
 
 /**
