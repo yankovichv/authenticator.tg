@@ -1,22 +1,21 @@
-/* The list scrolls inside itself rather than with the page. A sticky child
-   only sticks within its own parent, and with the page scrolling the parent
-   is one screen tall — the search field would ride away after the first
-   screenful. */
 .cards {
   height: 100%;
-  overflow-y: auto;
-  overscroll-behavior: contain;
 
-  /* Stays put while the list scrolls: search is what you reach for after
-     scrolling failed to find the account, and by then the field would be
-     far above the screen. */
+  /* Search sits outside the scrolling area entirely: inside it, the
+     scrollbar ran the full height and passed underneath the field, and
+     pulling the list down carried the field away with it. */
   &_search {
-    top: 0;
-    z-index: 2;
-    position: sticky;
+    flex: 0 0 auto;
     box-sizing: border-box;
     padding: 12px 16px;
     background-color: var(--color-background-100);
+  }
+
+  &_scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   &_empty {

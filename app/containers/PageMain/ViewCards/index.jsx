@@ -124,6 +124,8 @@ export default class ViewCards extends React.Component {
         box
         fillY
         fillX
+        direction="col"
+        display="flex"
         style={this.props.style}
         className={classNames(css['cards'], {
           [this.props.className]: !!this.props.className,
@@ -145,7 +147,7 @@ export default class ViewCards extends React.Component {
           </Block>
         }
 
-        <div ref={this.list}>
+        <div ref={this.list} className={css['cards_scroll']}>
           {visible.map(({ uuid, totp }, index) => {
             return (
               <CardCode
@@ -175,21 +177,21 @@ export default class ViewCards extends React.Component {
               />
             )
           })}
-        </div>
 
-        {visible.length === 0 &&
-          <Block
-            fillX
-            box
-            size={16}
-            height={24}
-            weight={400}
-            color="foreground-050"
-            className={css['cards_empty']}
-          >
-            Nothing matches “{this.state.query.trim()}”
-          </Block>
-        }
+          {visible.length === 0 &&
+            <Block
+              fillX
+              box
+              size={16}
+              height={24}
+              weight={400}
+              color="foreground-050"
+              className={css['cards_empty']}
+            >
+              Nothing matches “{this.state.query.trim()}”
+            </Block>
+          }
+        </div>
       </Block>
     )
   }

@@ -64,15 +64,6 @@ export default class ViewExport extends React.Component {
             Copying puts them on the clipboard as setup links. Anyone holding those links can generate your codes — paste them straight into your password manager and keep them there.
           </span>
         </Block>
-
-        <Block
-          size={12}
-          height={16}
-          weight={400}
-          color="foreground-050"
-        >
-          Version {process.env.BUILD}
-        </Block>
       </Block>
     )
   }
