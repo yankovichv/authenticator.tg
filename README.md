@@ -61,9 +61,9 @@ Production bundle is created in `dist/`.
 ```bash
 yarn test:unit       # Storage and QR parsing tests
 yarn test:eslint     # ESLint
-yarn test:tsc        # TypeScript check
-yarn test:prettier   # Formatting check
 ```
+
+Both run on every push and pull request.
 
 ## Tech stack
 

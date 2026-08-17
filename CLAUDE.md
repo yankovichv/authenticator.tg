@@ -70,7 +70,8 @@ test/                    — node tests for storage and QR parsing (`yarn test:u
 - `yarn build` — production build → dist/
 - `yarn test:unit` — storage and QR parsing tests (no browser needed)
 - `yarn test:eslint` — lint
-- `yarn test:tsc` — type check
+
+Both run in CI on every push and pull request (`.github/workflows/checks.yml`).
 
 ## Deployment
 
@@ -101,4 +102,5 @@ Cloudflare dashboard.
 - Components: one folder per component with index.jsx + style.pcss
 - Styles: PostCSS with Less syntax, CSS Modules for isolation
 - Imports: use webpack aliases (@components, @containers, @lib, @store, @helper)
-- No TypeScript files yet, but TS checking is configured via JSDoc/babel
+- Plain JavaScript with JSDoc annotations; there is no TypeScript setup
+- Code, comments and commit messages in English

@@ -9,9 +9,7 @@
     "build": "webpack",
     "analyze": "webpack --analyze",
     "test:unit": "node test/storage.cjs && node test/totp.cjs",
-    "test:eslint": "eslint --ext .ts,.tsx,.js \"./\"",
-    "test:tsc": "tsc",
-    "test:prettier": "prettier --check"
+    "test:eslint": "eslint --ext .ts,.tsx,.js \"./\""
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
