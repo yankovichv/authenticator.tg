@@ -1,0 +1,28 @@
+name: Checks
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+
+      - run: yarn install --frozen-lockfile
+
+      # Storage is where a mistake costs someone their 2FA keys, so these
+      # run first and the rest is not worth looking at if they fail.
+      - run: yarn test:unit
+
+      - run: yarn test:eslint
+
+      - run: yarn build
