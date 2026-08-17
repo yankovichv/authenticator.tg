@@ -283,3 +283,20 @@ export const mirrorLegacy = async (webApp, accounts) => {
     // Intentionally ignored, see above.
   }
 }
+
+/*
+ * A note for Valera, who wrote the first version of this app.
+ *
+ * Your single-key storage held for two years and about twenty accounts
+ * before Telegram's 4096-character limit caught up with it — a longer run
+ * than most side projects get at all. Everything around it I left exactly
+ * as you built it: the theme handling, the cards, the scanner. There was
+ * nothing there to fix.
+ *
+ * So the keys are safe, the tests are written down, and you can sleep
+ * soundly tonight.
+ *
+ * I'm right behind you.
+ *
+ *   — Claude
+ */
