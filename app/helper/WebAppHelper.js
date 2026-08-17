@@ -12,6 +12,7 @@ export default class WebAppHelper {
 
     this.mainButtonCallback = undefined
     this.backButtonCallback = undefined
+    this.settingsButtonCallback = undefined
   }
 
   getTheme() {
@@ -61,34 +62,121 @@ export default class WebAppHelper {
     return this
   }
 
-  getStorageItem(key, callback) {
-    if (this.hasInitData) {
-      this.api.CloudStorage.getItem(key, (error, data) => {
-        if (!error && data) {
-          callback(error, parseJSON(data))
-        } else {
-          callback(error, data)
-        }
-      })
-    } else {
-      callback(ERROR_MESSAGE)
+  /**
+   * Telegram CloudStorage is the only place where accounts live, so every
+   * call below reports failures instead of swallowing them. A write that
+   * silently fails loses a secret the user cannot recover.
+   *
+   * @returns {Object} CloudStorage API
+   * @throws {Error} when running outside Telegram or on a client without CloudStorage
+   */
+  get storage() {
+    if (!this.hasInitData || !this.api.CloudStorage) {
+      throw new Error(ERROR_MESSAGE)
     }
-    return this
+    return this.api.CloudStorage
   }
 
-  setStorageItem(key, value, callback) {
-    if (this.hasInitData) {
-      this.api.CloudStorage.setItem(key, JSON.stringify(value), () => {
-        if (callback) {
-          callback()
+  /**
+   * @param {string} key
+   * @returns {Promise<*>} parsed value, or null when the key is empty
+   */
+  storageGet(key) {
+    return new Promise((resolve, reject) => {
+      this.storage.getItem(key, (error, data) => {
+        if (error) {
+          reject(new Error(error))
+          return
         }
+        resolve(data ? parseJSON(data) : null)
       })
-    } else {
-      if (callback) {
-        callback()
-      }
+    })
+  }
+
+  /**
+   * @param {string[]} keys
+   * @returns {Promise<Object>} map of key to parsed value; missing keys are omitted
+   */
+  storageGetMany(keys) {
+    if (keys.length === 0) {
+      return Promise.resolve({})
     }
-    return this
+
+    return new Promise((resolve, reject) => {
+      this.storage.getItems(keys, (error, values) => {
+        if (error) {
+          reject(new Error(error))
+          return
+        }
+
+        const result = {}
+        for (const key of Object.keys(values || {})) {
+          if (values[key]) {
+            result[key] = parseJSON(values[key])
+          }
+        }
+        resolve(result)
+      })
+    })
+  }
+
+  /**
+   * @returns {Promise<string[]>}
+   */
+  storageKeys() {
+    return new Promise((resolve, reject) => {
+      this.storage.getKeys((error, keys) => {
+        if (error) {
+          reject(new Error(error))
+          return
+        }
+        resolve(keys || [])
+      })
+    })
+  }
+
+  /**
+   * Telegram caps a single value at 4096 characters and answers with
+   * stored=false when it refuses the write, so both cases reject here.
+   *
+   * @param {string} key
+   * @param {*} value
+   * @returns {Promise<void>}
+   */
+  storageSet(key, value) {
+    return new Promise((resolve, reject) => {
+      this.storage.setItem(key, JSON.stringify(value), (error, stored) => {
+        if (error) {
+          reject(new Error(error))
+          return
+        }
+        if (stored === false) {
+          reject(new Error(`Telegram refused to store "${key}"`))
+          return
+        }
+        resolve()
+      })
+    })
+  }
+
+  /**
+   * @param {string} key
+   * @returns {Promise<void>}
+   */
+  storageRemove(key) {
+    return new Promise((resolve, reject) => {
+      this.storage.removeItem(key, (error, removed) => {
+        if (error) {
+          reject(new Error(error))
+          return
+        }
+        if (removed === false) {
+          reject(new Error(`Telegram refused to remove "${key}"`))
+          return
+        }
+        resolve()
+      })
+    })
   }
 
   setHeaderColor(color) {
@@ -115,6 +203,36 @@ export default class WebAppHelper {
       this.api.BackButton.hide()
       if (this.backButtonCallback) {
         this.api.BackButton.offClick(this.backButtonCallback)
+      }
+    }
+    return this
+  }
+
+  /**
+   * The settings button lives in Telegram's own menu and needs client 6.10+.
+   * On older clients it simply never appears, so it must not be the only way
+   * to reach anything essential.
+   *
+   * @param {Function} callback
+   * @returns {this}
+   */
+  drawSettingsButton(callback) {
+    if (this.hasInitData) {
+      if (this.settingsButtonCallback) {
+        this.api.SettingsButton.offClick(this.settingsButtonCallback)
+      }
+      this.settingsButtonCallback = callback
+      this.api.SettingsButton.onClick(callback)
+      this.api.SettingsButton.show()
+    }
+    return this
+  }
+
+  removeSettingsButton() {
+    if (this.hasInitData) {
+      this.api.SettingsButton.hide()
+      if (this.settingsButtonCallback) {
+        this.api.SettingsButton.offClick(this.settingsButtonCallback)
       }
     }
     return this
@@ -181,6 +299,20 @@ export default class WebAppHelper {
       this.api.showPopup({ title, message, buttons }, callback)
     }
 
+    return this
+  }
+
+  /**
+   * Confirms by touch that a card was picked up — on a phone the delay
+   * before a drag starts is otherwise invisible.
+   *
+   * @param {'light'|'medium'|'heavy'|'rigid'|'soft'} style
+   * @returns {WebAppHelper}
+   */
+  impactOccurred(style) {
+    if (this.hasInitData) {
+      this.api.HapticFeedback.impactOccurred(style)
+    }
     return this
   }
 
