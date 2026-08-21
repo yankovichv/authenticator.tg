@@ -70,10 +70,16 @@ export default class ViewCards extends React.Component {
     this.sortable = Sortable.create(this.list.current, {
       animation: 150,
       // On touch the drag has to wait, otherwise it would fight scrolling.
-      // With a mouse it starts on movement, which never blocks a click.
+      // With a mouse there is no wait, so distance is the only thing that
+      // separates a drag from a click.
       delay: 300,
       delayOnTouchOnly: true,
       touchStartThreshold: 5,
+      // A press is never perfectly still. By default the fallback counts a
+      // single stray pixel as a drag and then swallows the click that
+      // follows, which was losing taps on Copy on desktop. Same 5px as the
+      // touch threshold above, so both pointers agree on what a drag is.
+      fallbackTolerance: 5,
       // Cards have no background of their own — only the page does. The
       // browser's native drag image would therefore be a transparent card
       // smeared over the list, so the dragged copy is rendered by us and
@@ -214,10 +220,16 @@ export default class ViewCards extends React.Component {
   move(event) {
     const { oldIndex, newIndex } = event
 
+    // Dropped back where it started: the node is already in place, and
+    // taking it out of the DOM to put it back would be churn for nothing.
+    if (oldIndex === newIndex) {
+      return
+    }
+
     event.item.remove()
     event.from.insertBefore(event.item, event.from.children[oldIndex] || null)
 
-    if (oldIndex !== newIndex && this.props.onMove) {
+    if (this.props.onMove) {
       this.props.onMove(oldIndex, newIndex)
     }
   }
